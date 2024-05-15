@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Background Colors -->
+    <color name="background_white">#FFFFFF</color>
+    <color name="background_black">#000000</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary_dark">#ffffff</color>
+    <color name="text_primary_light">#000000</color>
+
+    <!-- Button Colors -->
+    <color name="button_success">#14A44D</color>
+    <color name="button_danger">#FF002B</color>
+    <color name="button_warning">#E4A11B</color>
+    <color name="button_info">#54B4D3</color>
+
+</resources>
