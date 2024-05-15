@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity() {
         }
       })
   }
-
   override fun onStart() {
     super.onStart()
     permissionHandler.checkAndRequestPermission(
@@ -83,7 +82,6 @@ class MainActivity : AppCompatActivity() {
     soundUtil = SoundUtil(this, cameraUtil.cameraExecutor())
     blankScreenUtil = BlinkScreenUtil(this)
     initUi()
-
   }
 
   @SuppressLint("ClickableViewAccessibility")

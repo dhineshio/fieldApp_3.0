@@ -2,27 +2,21 @@ package com.thaagam.field_app.Camerautils
 
 import android.animation.Animator
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.res.ColorStateList
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
-import com.thaagam.field_app.R
-import com.thaagam.field_app.Utilities.AnimationUtil
 
 class QrCodeAnalyzer(
   private val onQrCodeDetected: (qrCode: Barcode, imageProxy: ImageProxy) -> Unit,
   private val lastImageCaptureTime: () -> Long,
   private val qrResultView: TextView,
   private val qrLottie : ImageView,
-  private val context : Context
 ) : ImageAnalysis.Analyzer {
 
   // Flag to indicate if animation is currently in progress
@@ -76,18 +70,16 @@ class QrCodeAnalyzer(
     qrResultView.animate().translationY(0f).setDuration(200).setListener(object : Animator.AnimatorListener {
       override fun onAnimationStart(animation: Animator) {
       }
-
       override fun onAnimationEnd(animation: Animator) {
         isAnimating = false
       }
-
       override fun onAnimationCancel(animation: Animator) {
         isAnimating = false
       }
-
       override fun onAnimationRepeat(animation: Animator) {
         TODO("Not yet implemented")
       }
     })
+    qrLottie.animate().scaleX(0f).scaleY(0f).setDuration(200).start()
   }
 }

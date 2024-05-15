@@ -58,7 +58,6 @@ class NoQRActivity : AppCompatActivity() {
     qrResultView = findViewById(R.id.qr_result_txt)
     qrLottie.visibility = View.GONE
     qrResultView.visibility = View.GONE
-
     settingUI()
   }
   private fun settingUI(){

@@ -172,8 +172,7 @@ class CameraUtil(
         qrCodeResult = fileUtil.convertToFilenameSafe(qrCode.rawValue!!)
         qrLottie.backgroundTintList = ColorStateList.valueOf(
           ContextCompat.getColor(context, R.color.button_success))
-        qrLottie.animate().scaleX(.8f).scaleY(.8f).setDuration(200).start()
-      }, {CaptureImage(context).getLastImageCaptureTime()}, qrResultView, qrLottie, context))
+      }, {CaptureImage(context).getLastImageCaptureTime()}, qrResultView, qrLottie))
     }
   }
 
@@ -196,7 +195,6 @@ class CameraUtil(
     val parts = qrCode.split("-").dropLast(5)
     return parts.joinToString("-")
   }
-
   /**
    * Calculates and returns the desired resolution for the camera preview.
    * @param context The application context.
@@ -225,6 +223,7 @@ class CameraUtil(
   fun getQrCodeResult(): String? {
     return qrCodeResult
   }
+
   fun getImageCapture1(): ImageCapture {
     return imageCapture
   }

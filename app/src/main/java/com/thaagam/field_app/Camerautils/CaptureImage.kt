@@ -11,7 +11,6 @@ import java.io.File
 
 class CaptureImage(private val context: Context) {
 
-
   //OBJECTS
   private val cameraUtil = CameraUtil(context)
   private val commonUtil = CommonUtil(context)
@@ -64,7 +63,6 @@ class CaptureImage(private val context: Context) {
         }
       )
     }
-
   }
   fun getLastImageCaptureTime(): Long {
     return lastImageCaptureTime
