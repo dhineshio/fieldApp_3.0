@@ -20,11 +20,11 @@ import com.thaagam.field_app.Utilities.SoundUtil
 class MainActivity : AppCompatActivity() {
 
   //OBJECT INITIALIZATION
-  private var permissionHandler: PermissionHandler = PermissionHandler(this)
-  private lateinit var cameraUtil: CameraUtil
-  private lateinit var soundUtil: SoundUtil
-  private lateinit var blankScreenUtil: BlinkScreenUtil
-  private val captureImage : CaptureImage = CaptureImage(this)
+  private val permissionHandler: PermissionHandler = PermissionHandler(this)
+  private val cameraUtil = CameraUtil(this)
+  private val soundUtil =SoundUtil(this, cameraUtil.cameraExecutor())
+  private val blankScreenUtil = BlinkScreenUtil(this)
+  private val captureImage: CaptureImage = CaptureImage(this)
 
   //UI INITIALIZATION
   private lateinit var cameraPreview: PreviewView
@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         }
       })
   }
+
   override fun onStart() {
     super.onStart()
     permissionHandler.checkAndRequestPermission(
@@ -78,9 +79,6 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
     setContentView(R.layout.activity_main)
-    cameraUtil = CameraUtil(this)
-    soundUtil = SoundUtil(this, cameraUtil.cameraExecutor())
-    blankScreenUtil = BlinkScreenUtil(this)
     initUi()
   }
 
@@ -111,7 +109,6 @@ class MainActivity : AppCompatActivity() {
       false // Return false to indicate that we haven't consumed the event
     }
   }
-
   private fun startCamera() {
     cameraUtil.startCamera(
       this@MainActivity,
@@ -122,5 +119,4 @@ class MainActivity : AppCompatActivity() {
       qrLottie,
     )
   }
-
 }

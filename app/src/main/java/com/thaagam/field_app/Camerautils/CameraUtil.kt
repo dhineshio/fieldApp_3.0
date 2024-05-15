@@ -41,7 +41,6 @@ class CameraUtil(
   //OBJECTS
   private val fileUtil = FileUtil()
   private val commonUtil = CommonUtil(context)
-  private val animationUtil = AnimationUtil(context)
 
   //LATE INIT VARIABLES
   private lateinit var camera: Camera
@@ -49,6 +48,7 @@ class CameraUtil(
 
   //VARIABLES
   private var qrCodeResult: String? = null
+
   //LAZY VARIABLES
   private val imageCapture: ImageCapture by lazy {
     ImageCapture.Builder().setTargetResolution(getDesiredResolution(context)).build()
@@ -59,14 +59,8 @@ class CameraUtil(
   private val cameraProviderFuture by lazy {
     ProcessCameraProvider.getInstance(context)
   }
-  /**
-   * Starts the camera preview with specified parameters.
-   * @param preViewView The PreviewView where the camera preview will be displayed.
-   * @param ultraWide Indicates whether to use an ultra-wide lens if available.
-   * @param enableQrCodeScanning Indicates whether QR code scanning should be enabled.
-   * @param tvQrCodeResult The TextView to display the result of QR code scanning.
-   * @param qrCodeScannerView The ImageView used as a scanner overlay for QR code scanning.
-   */
+
+
   @SuppressLint("ClickableViewAccessibility")
   fun startCamera(
     lifecycleOwner : LifecycleOwner,
@@ -78,7 +72,7 @@ class CameraUtil(
   ) {
     try {
       if (enableQrCodeScanning && qrResultView == null) {
-        throw IllegalArgumentException("tvQrCodeResult cannot be null when enableQrCodeScanning is true")
+        throw IllegalArgumentException("qrResultView cannot be null when enableQrCodeScanning is true")
       }
       cameraProviderFuture.addListener(
         {
@@ -129,7 +123,7 @@ class CameraUtil(
     }
   }
 
-  //@return A CameraSelector instance based on the specified parameters.
+
   @SuppressLint("RestrictedApi")
   private fun getCameraSelector(ultraWide: Boolean): CameraSelector {
     return if (ultraWide) {
@@ -153,14 +147,12 @@ class CameraUtil(
     }
   }
 
-  //@return A configured Preview instance.
   private fun getPreview(cameraPreview: PreviewView): Preview {
     return Preview.Builder().build().also {
       it.setSurfaceProvider(cameraPreview.surfaceProvider)
     }
   }
 
-  //@return An ImageAnalysis instance configured for QR code scanning.
   private fun getImageAnalyzer(
     qrResultView: TextView,
     qrLottie: ImageView,
@@ -172,11 +164,10 @@ class CameraUtil(
         qrCodeResult = fileUtil.convertToFilenameSafe(qrCode.rawValue!!)
         qrLottie.backgroundTintList = ColorStateList.valueOf(
           ContextCompat.getColor(context, R.color.button_success))
-      }, {CaptureImage(context).getLastImageCaptureTime()}, qrResultView, qrLottie))
+      }, { CaptureImage(context).getLastImageCaptureTime()}, qrResultView, qrLottie))
     }
   }
 
-  //Refresh a page and reset an UI
   fun refreshPage(
     qrResultView: TextView, qrLottie: ImageView, swipeRefreshLayout: SwipeRefreshLayout,
   ) {
@@ -189,17 +180,10 @@ class CameraUtil(
     swipeRefreshLayout.isRefreshing = false
   }
 
-
-  //@return Extract a name from QR code.
   private fun extractNameFromQRCode(qrCode: String): String {
     val parts = qrCode.split("-").dropLast(5)
     return parts.joinToString("-")
   }
-  /**
-   * Calculates and returns the desired resolution for the camera preview.
-   * @param context The application context.
-   * @return The desired resolution as a Size object.
-   */
   private fun getDesiredResolution(context: Context): Size {
     val ratio = 1.1f
     val displayMetric = context.resources.displayMetrics
@@ -211,23 +195,15 @@ class CameraUtil(
     val desiredHeightPx = (desiredHeightDp * displayMetric.density).toInt()
     return Size(desiredWidthPx, desiredHeightPx)
   }
-
   fun cameraControl(): CameraControl {
     return cameraControl
   }
-
   fun cameraExecutor(): ExecutorService {
     return cameraExecutor
   }
-
-  fun getQrCodeResult(): String? {
-    return qrCodeResult
-  }
-
   fun getImageCapture1(): ImageCapture {
     return imageCapture
   }
-
 }
 
 

@@ -3,12 +3,7 @@ package com.thaagam.field_app
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MotionEvent
-import android.view.View
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.ToggleButton
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.view.PreviewView
 import com.thaagam.field_app.Camerautils.CameraUtil
@@ -16,27 +11,24 @@ import com.thaagam.field_app.Permissions.PermissionHandler
 import com.thaagam.field_app.Utilities.BlinkScreenUtil
 import com.thaagam.field_app.Utilities.SoundUtil
 
-class NoQRActivity : AppCompatActivity() {
+class TakeVideoActivity : AppCompatActivity() {
 
   //OBJECTS
   private val permissionHandler = PermissionHandler(this)
   private val cameraUtil = CameraUtil(this)
   private val soundUtil = SoundUtil(this, cameraUtil.cameraExecutor())
-  private val blankScreenUtil = BlinkScreenUtil(this)
-
+  private val blinkScreenUtil = BlinkScreenUtil(this)
   //UI ELEMENTS
+  private lateinit var cameraPreview : PreviewView
   private lateinit var captureBtn : ImageButton
 
+  //PERMISSIONS
   private val permissions = arrayOf(
     PermissionHandler.CAMERA_PERMISSION,
     PermissionHandler.WRITE_EXTERNAL_PERMISSION,
     PermissionHandler.LOCATION_PERMISSION
   )
 
-  override fun onStart() {
-    super.onStart()
-    cameraUtil.startCamera(this@NoQRActivity,cameraPreview, true, false)
-  }
 
   override fun onRequestPermissionsResult(
     requestCode: Int,
@@ -44,47 +36,50 @@ class NoQRActivity : AppCompatActivity() {
     grantResults: IntArray
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    permissionHandler.handlePermissionResult(requestCode, permissions, grantResults, object : PermissionHandler.PermissionCallback{
+    permissionHandler.handlePermissionResult(requestCode, permissions, grantResults, object  : PermissionHandler.PermissionCallback{
       override fun onPermissionGranted(requestCode: Int) {
         when(requestCode){
           PermissionHandler.REQUEST_ALL_PERMISSIONS ->{
-            cameraUtil.startCamera(this@NoQRActivity, cameraPreview, true, false)
+            startCamera()
           }
         }
       }
     })
   }
 
-  private lateinit var qrLottie : ImageView
-  private lateinit var qrResultView : TextView
-  private lateinit var cameraPreview: PreviewView
-  private lateinit var flash : ToggleButton
+  override fun onStart() {
+    super.onStart()
+    permissionHandler.checkAndRequestPermission(permissions, PermissionHandler.REQUEST_ALL_PERMISSIONS, object : PermissionHandler.PermissionCallback{
+      override fun onPermissionGranted(requestCode: Int) {
+       startCamera()
+      }
+
+    })
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-    enableEdgeToEdge()
-    qrLottie = findViewById(R.id.qr_lottie)
-    qrResultView = findViewById(R.id.qr_result_txt)
-    qrLottie.visibility = View.GONE
-    qrResultView.visibility = View.GONE
-    settingUI()
-
-
+    setContentView(R.layout.activity_take_video)
+    initUI()
 
   }
+
   @SuppressLint("ClickableViewAccessibility")
-  private fun settingUI(){
+  private fun initUI(){
     cameraPreview = findViewById(R.id.cameraPreview)
-    flash = findViewById(R.id.flash_btn)
     captureBtn = findViewById(R.id.capture_btn)
 
     captureBtn.setOnTouchListener { _, event ->
       if (event.action == MotionEvent.ACTION_DOWN) {
+        // The button is pressed
         soundUtil.soundEffect(R.raw.camera_click)
-        blankScreenUtil.blinkScreen()
+        blinkScreenUtil.blinkScreen()
       }
-      false
+      false // Return false to indicate that we haven't consumed the event
     }
+  }
+
+  private fun startCamera(){
+    cameraUtil.startCamera(this, cameraPreview, true, false)
   }
 }
