@@ -10,15 +10,11 @@ class SoundUtil(private val context: Context,private val cameraExecutor: Executo
 	  try {
 		val mediaPlayer = MediaPlayer.create(context, soundId)
 		mediaPlayer.start()
-	  } finally {
-		cameraExecutor.submit {
-		  try {
-			MediaPlayer.create(context, soundId).apply {
-			  release()
-			}
-		  } catch (ignore: Exception) {
+		  mediaPlayer.setOnCompletionListener { mp ->
+			  mp.release()
 		  }
-		}
+	  } catch (e : Exception){
+		  e.printStackTrace()
 	  }
 	}
   }

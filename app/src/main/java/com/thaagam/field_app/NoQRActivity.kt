@@ -16,13 +16,7 @@ import com.thaagam.field_app.Permissions.PermissionHandler
 import com.thaagam.field_app.Utilities.BlinkScreenUtil
 import com.thaagam.field_app.Utilities.SoundUtil
 
-class NoQRActivity : AppCompatActivity() {
-
-  //OBJECTS
-  private val permissionHandler = PermissionHandler(this)
-  private val cameraUtil = CameraUtil(this)
-  private val soundUtil = SoundUtil(this, cameraUtil.cameraExecutor())
-  private val blankScreenUtil = BlinkScreenUtil(this)
+class NoQRActivity : BaseActivity(){
 
   //UI ELEMENTS
   private lateinit var captureBtn : ImageButton
@@ -70,8 +64,6 @@ class NoQRActivity : AppCompatActivity() {
     qrResultView.visibility = View.GONE
     settingUI()
 
-
-
   }
   @SuppressLint("ClickableViewAccessibility")
   private fun settingUI(){
@@ -82,7 +74,7 @@ class NoQRActivity : AppCompatActivity() {
     captureBtn.setOnTouchListener { _, event ->
       if (event.action == MotionEvent.ACTION_DOWN) {
         soundUtil.soundEffect(R.raw.camera_click)
-        blankScreenUtil.blinkScreen()
+        blinkScreenUtil.blinkScreen()
       }
       false
     }

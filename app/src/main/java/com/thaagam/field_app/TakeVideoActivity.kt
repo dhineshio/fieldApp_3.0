@@ -1,26 +1,26 @@
 package com.thaagam.field_app
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.ImageButton
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.camera.view.PreviewView
-import com.thaagam.field_app.Camerautils.CameraUtil
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.thaagam.field_app.Permissions.PermissionHandler
-import com.thaagam.field_app.Utilities.BlinkScreenUtil
-import com.thaagam.field_app.Utilities.SoundUtil
 
-class TakeVideoActivity : AppCompatActivity() {
+class TakeVideoActivity : BaseActivity() {
 
-  //OBJECTS
-  private val permissionHandler = PermissionHandler(this)
-  private val cameraUtil = CameraUtil(this)
-  private val soundUtil = SoundUtil(this, cameraUtil.cameraExecutor())
-  private val blinkScreenUtil = BlinkScreenUtil(this)
   //UI ELEMENTS
   private lateinit var cameraPreview : PreviewView
   private lateinit var captureBtn : ImageButton
+  private lateinit var qrLottie : ImageView
+  private lateinit var qrResultView: TextView
+  private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+  private lateinit var menuBtn: ImageButton
 
   //PERMISSIONS
   private val permissions = arrayOf(
@@ -28,7 +28,6 @@ class TakeVideoActivity : AppCompatActivity() {
     PermissionHandler.WRITE_EXTERNAL_PERMISSION,
     PermissionHandler.LOCATION_PERMISSION
   )
-
 
   override fun onRequestPermissionsResult(
     requestCode: Int,
@@ -53,13 +52,14 @@ class TakeVideoActivity : AppCompatActivity() {
       override fun onPermissionGranted(requestCode: Int) {
        startCamera()
       }
-
     })
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    enableEdgeToEdge()
     setContentView(R.layout.activity_take_video)
+
     initUI()
 
   }
@@ -68,18 +68,29 @@ class TakeVideoActivity : AppCompatActivity() {
   private fun initUI(){
     cameraPreview = findViewById(R.id.cameraPreview)
     captureBtn = findViewById(R.id.capture_btn)
+    qrResultView = findViewById(R.id.qr_result_txt)
+    qrLottie = findViewById(R.id.qr_lottie)
+    swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
+    menuBtn = findViewById(R.id.menu_btn)
 
     captureBtn.setOnTouchListener { _, event ->
       if (event.action == MotionEvent.ACTION_DOWN) {
-        // The button is pressed
         soundUtil.soundEffect(R.raw.camera_click)
         blinkScreenUtil.blinkScreen()
       }
-      false // Return false to indicate that we haven't consumed the event
+      false
+    }
+    swipeRefreshLayout.setOnRefreshListener {
+      cameraUtil.refreshPage(qrResultView, qrLottie, swipeRefreshLayout)
+    }
+
+    menuBtn.setOnClickListener{
+      val intent = Intent(this, NoQRActivity::class.java)
+      startActivity(intent)
     }
   }
 
   private fun startCamera(){
-    cameraUtil.startCamera(this, cameraPreview, true, false)
+    cameraUtil.startCamera(this, cameraPreview, true, true, qrResultView, qrLottie)
   }
 }

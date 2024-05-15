@@ -1,6 +1,7 @@
 package com.thaagam.field_app
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.ImageButton
@@ -17,14 +18,12 @@ import com.thaagam.field_app.Permissions.PermissionHandler
 import com.thaagam.field_app.Utilities.BlinkScreenUtil
 import com.thaagam.field_app.Utilities.SoundUtil
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity(){
 
-  //OBJECT INITIALIZATION
-  private val permissionHandler: PermissionHandler = PermissionHandler(this)
-  private val cameraUtil = CameraUtil(this)
-  private val soundUtil =SoundUtil(this, cameraUtil.cameraExecutor())
-  private val blankScreenUtil = BlinkScreenUtil(this)
-  private val captureImage: CaptureImage = CaptureImage(this)
+  private val captureImage: CaptureImage by lazy {
+    CaptureImage(this)
+  }
+
 
   //UI INITIALIZATION
   private lateinit var cameraPreview: PreviewView
@@ -104,9 +103,14 @@ class MainActivity : AppCompatActivity() {
       if (event.action == MotionEvent.ACTION_DOWN) {
         // The button is pressed
         soundUtil.soundEffect(R.raw.camera_click)
-        blankScreenUtil.blinkScreen()
+        blinkScreenUtil.blinkScreen()
       }
       false // Return false to indicate that we haven't consumed the event
+    }
+
+    menuBtn.setOnClickListener{
+      val intent = Intent(this, TakeVideoActivity::class.java)
+      startActivity(intent)
     }
   }
   private fun startCamera() {

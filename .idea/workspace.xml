@@ -30,7 +30,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=9633933841000C4)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=990bcc7a)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -57,29 +57,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Android App.NoQRActivity.executor": "Run",
-    "Android App.TakeVideoActivity.executor": "Run",
-    "Android App.app.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/dhineshr/Documents/GitHub/fieldApp_3.0"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Android App.NoQRActivity.executor&quot;: &quot;Run&quot;,
+    &quot;Android App.TakeVideoActivity.executor&quot;: &quot;Run&quot;,
+    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/dhineshr/Documents/GitHub/fieldApp_3.0&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
       <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
     </key>
   </component>
-  <component name="RunManager" selected="Android App.NoQRActivity">
+  <component name="RunManager" selected="Android App.app">
     <configuration name="NoQRActivity" type="AndroidRunConfigurationType" factoryName="Android App" temporary="true">
       <module name="Field_app.app.main" />
       <option name="DEPLOY" value="true" />
@@ -283,8 +283,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Android App.NoQRActivity" />
         <item itemvalue="Android App.TakeVideoActivity" />
+        <item itemvalue="Android App.NoQRActivity" />
       </list>
     </recent_temporary>
   </component>
