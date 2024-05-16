@@ -7,6 +7,10 @@ android {
   namespace = "com.thaagam.field_app"
   compileSdk = 34
 
+  viewBinding{
+    enable = true
+  }
+
   defaultConfig {
     applicationId = "com.thaagam.field_app"
     minSdk = 26

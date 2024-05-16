@@ -4,36 +4,18 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.ToggleButton
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.view.PreviewView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.thaagam.field_app.Camerautils.CameraUtil
 import com.thaagam.field_app.Camerautils.CaptureImage
 import com.thaagam.field_app.Permissions.PermissionHandler
-import com.thaagam.field_app.Utilities.BlinkScreenUtil
-import com.thaagam.field_app.Utilities.SoundUtil
+import com.thaagam.field_app.databinding.ActivityMainBinding
 
-class MainActivity : BaseActivity(){
+class MainActivity : BaseActivity() {
 
   private val captureImage: CaptureImage by lazy {
     CaptureImage(this)
   }
 
-
-  //UI INITIALIZATION
-  private lateinit var cameraPreview: PreviewView
-  private lateinit var menuBtn: ImageButton
-  private lateinit var flashBtn: ToggleButton
-  private lateinit var captureBtn: ImageButton
-  private lateinit var qrResultView: TextView
-  private lateinit var galleryBtn: ImageButton
-  private lateinit var qrLottie: ImageView
-  private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+  private lateinit var mainBinding: ActivityMainBinding
 
   private val permissions = arrayOf(
     PermissionHandler.CAMERA_PERMISSION,
@@ -74,53 +56,40 @@ class MainActivity : BaseActivity(){
       })
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    enableEdgeToEdge()
-    setContentView(R.layout.activity_main)
-    initUi()
-  }
+    mainBinding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(mainBinding.root)
 
-  @SuppressLint("ClickableViewAccessibility")
-  private fun initUi() {
-    cameraPreview = findViewById(R.id.cameraPreview)
-    qrLottie = findViewById(R.id.qr_lottie)
-    qrResultView = findViewById(R.id.qr_result_txt)
-    menuBtn = findViewById(R.id.menu_btn)
-    flashBtn = findViewById(R.id.flash_btn)
-    captureBtn = findViewById(R.id.capture_btn)
-    galleryBtn = findViewById(R.id.gallery_btn)
-    swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
-
-
-    swipeRefreshLayout.setOnRefreshListener {
-      cameraUtil.refreshPage(qrResultView, qrLottie, swipeRefreshLayout)
+    mainBinding.swipeRefreshLayout.setOnRefreshListener {
+      cameraUtil.refreshPage(
+        mainBinding.qrResultTxt,
+        mainBinding.qrLottie,
+        mainBinding.swipeRefreshLayout
+      )
     }
-    captureBtn.setOnClickListener {
-      captureImage.captureImage()
-    }
-    captureBtn.setOnTouchListener { _, event ->
+    mainBinding.captureBtn.setOnTouchListener { _, event ->
       if (event.action == MotionEvent.ACTION_DOWN) {
-        // The button is pressed
         soundUtil.soundEffect(R.raw.camera_click)
         blinkScreenUtil.blinkScreen()
       }
-      false // Return false to indicate that we haven't consumed the event
+      false
     }
-
-    menuBtn.setOnClickListener{
+    mainBinding.menuBtn.setOnClickListener {
       val intent = Intent(this, TakeVideoActivity::class.java)
       startActivity(intent)
     }
   }
+
   private fun startCamera() {
     cameraUtil.startCamera(
       this@MainActivity,
-      cameraPreview,
+      mainBinding.cameraPreview,
       true,
       enableQrCodeScanning = true,
-      qrResultView,
-      qrLottie,
+      mainBinding.qrResultTxt,
+      mainBinding.qrLottie,
     )
   }
 }
