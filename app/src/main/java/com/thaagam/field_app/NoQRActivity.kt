@@ -12,10 +12,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.camera.view.PreviewView
 import com.thaagam.field_app.Permissions.PermissionHandler
 import com.thaagam.field_app.databinding.ActivityMainBinding
+import com.thaagam.field_app.databinding.CameraPreviewBinding
 
 class NoQRActivity : BaseActivity() {
 
   private lateinit var noQrBinding : ActivityMainBinding
+  private lateinit var cameraPreviewBinding : CameraPreviewBinding
 
   private val permissions = arrayOf(
     PermissionHandler.CAMERA_PERMISSION,
@@ -28,7 +30,7 @@ class NoQRActivity : BaseActivity() {
     permissionHandler.checkAndRequestPermission(permissions, PermissionHandler
       .REQUEST_ALL_PERMISSIONS, object : PermissionHandler.PermissionCallback {
       override fun onPermissionGranted(requestCode: Int) {
-        cameraUtil.startCamera(this@NoQRActivity, noQrBinding.cameraPreview, true, false)
+        cameraUtil.startCamera(this@NoQRActivity, cameraPreviewBinding.cameraPreview, true, false)
       }
     })
   }
@@ -47,7 +49,7 @@ class NoQRActivity : BaseActivity() {
         override fun onPermissionGranted(requestCode: Int) {
           when (requestCode) {
             PermissionHandler.REQUEST_ALL_PERMISSIONS -> {
-              cameraUtil.startCamera(this@NoQRActivity, noQrBinding.cameraPreview, true, false)
+              cameraUtil.startCamera(this@NoQRActivity, cameraPreviewBinding.cameraPreview, true, false)
             }
           }
         }
@@ -59,12 +61,14 @@ class NoQRActivity : BaseActivity() {
     super.onCreate(savedInstanceState)
     noQrBinding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(noQrBinding.root)
+
+    cameraPreviewBinding = CameraPreviewBinding.bind(noQrBinding.cameraPreviewInclude.root)
+
     noQrBinding.qrLottie.visibility = View.INVISIBLE
     noQrBinding.qrResultTxt.visibility = View.INVISIBLE
     noQrBinding.swipeRefreshLayout.setOnRefreshListener {
       noQrBinding.swipeRefreshLayout.isRefreshing = false
     }
-
 
     noQrBinding.captureBtn.setOnTouchListener { _, event ->
       if (event.action == MotionEvent.ACTION_DOWN) {
@@ -74,6 +78,9 @@ class NoQRActivity : BaseActivity() {
       false
     }
 
+    noQrBinding.flash.setOnCheckedChangeListener{ _, isChecked ->
+      flashlightUtil.toggleFlashlight(cameraUtil.cameraControl(), isChecked)
+    }
   }
 
 }

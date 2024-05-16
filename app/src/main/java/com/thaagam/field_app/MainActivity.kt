@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import com.thaagam.field_app.Camerautils.CaptureImage
 import com.thaagam.field_app.Permissions.PermissionHandler
+import com.thaagam.field_app.Utilities.FlashlightUtil
 import com.thaagam.field_app.databinding.ActivityMainBinding
+import com.thaagam.field_app.databinding.CameraPreviewBinding
 
 class MainActivity : BaseActivity() {
 
@@ -16,6 +18,7 @@ class MainActivity : BaseActivity() {
   }
 
   private lateinit var mainBinding: ActivityMainBinding
+  private lateinit var cameraPreviewBinding : CameraPreviewBinding
 
   private val permissions = arrayOf(
     PermissionHandler.CAMERA_PERMISSION,
@@ -62,6 +65,8 @@ class MainActivity : BaseActivity() {
     mainBinding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(mainBinding.root)
 
+    cameraPreviewBinding = CameraPreviewBinding.bind(mainBinding.cameraPreviewInclude.root)
+
     mainBinding.swipeRefreshLayout.setOnRefreshListener {
       cameraUtil.refreshPage(
         mainBinding.qrResultTxt,
@@ -69,6 +74,11 @@ class MainActivity : BaseActivity() {
         mainBinding.swipeRefreshLayout
       )
     }
+
+    mainBinding.flash.setOnCheckedChangeListener { _, isChecked ->
+      flashlightUtil.toggleFlashlight(cameraUtil.cameraControl(), isChecked)
+    }
+
     mainBinding.captureBtn.setOnTouchListener { _, event ->
       if (event.action == MotionEvent.ACTION_DOWN) {
         soundUtil.soundEffect(R.raw.camera_click)
@@ -76,6 +86,7 @@ class MainActivity : BaseActivity() {
       }
       false
     }
+
     mainBinding.menuBtn.setOnClickListener {
       val intent = Intent(this, TakeVideoActivity::class.java)
       startActivity(intent)
@@ -85,7 +96,7 @@ class MainActivity : BaseActivity() {
   private fun startCamera() {
     cameraUtil.startCamera(
       this@MainActivity,
-      mainBinding.cameraPreview,
+      cameraPreviewBinding.cameraPreview,
       true,
       enableQrCodeScanning = true,
       mainBinding.qrResultTxt,

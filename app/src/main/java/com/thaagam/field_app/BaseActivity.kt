@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.thaagam.field_app.Camerautils.CameraUtil
 import com.thaagam.field_app.Permissions.PermissionHandler
 import com.thaagam.field_app.Utilities.BlinkScreenUtil
+import com.thaagam.field_app.Utilities.FlashlightUtil
 import com.thaagam.field_app.Utilities.SoundUtil
 
 open class BaseActivity : AppCompatActivity(){
@@ -19,5 +20,9 @@ open class BaseActivity : AppCompatActivity(){
   }
   protected val blinkScreenUtil: BlinkScreenUtil by lazy {
     BlinkScreenUtil(this)
+  }
+
+  protected val flashlightUtil : FlashlightUtil by lazy {
+    FlashlightUtil(this)
   }
 }

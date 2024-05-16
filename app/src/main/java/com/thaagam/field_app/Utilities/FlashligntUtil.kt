@@ -16,6 +16,7 @@ class FlashlightUtil(private val context: Context) {
 
   //LATE INIT VARIABLES
   private lateinit var cameraControl: CameraControl
+
   fun toggleFlashlight(cameraControl: CameraControl, isChecked : Boolean) {
 	this.cameraControl = cameraControl
 	try {

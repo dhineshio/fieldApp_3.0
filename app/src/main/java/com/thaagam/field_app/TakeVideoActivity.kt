@@ -4,26 +4,15 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
-import androidx.camera.view.PreviewView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import android.view.ViewGroup
 import com.thaagam.field_app.Permissions.PermissionHandler
 import com.thaagam.field_app.databinding.ActivityTakeVideoBinding
+import com.thaagam.field_app.databinding.CameraPreviewBinding
 
 class TakeVideoActivity : BaseActivity() {
 
   private lateinit var takeVideoBinding: ActivityTakeVideoBinding
-
-  //UI ELEMENTS
-  private lateinit var cameraPreview : PreviewView
-  private lateinit var captureBtn : ImageButton
-  private lateinit var qrLottie : ImageView
-  private lateinit var qrResultView: TextView
-  private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-  private lateinit var menuBtn: ImageButton
+  private lateinit var cameraPreviewBinding: CameraPreviewBinding
 
   //PERMISSIONS
   private val permissions = arrayOf(
@@ -64,6 +53,8 @@ class TakeVideoActivity : BaseActivity() {
     takeVideoBinding = ActivityTakeVideoBinding.inflate(layoutInflater)
     setContentView(takeVideoBinding.root)
 
+    cameraPreviewBinding = CameraPreviewBinding.bind(takeVideoBinding.cameraPreviewInclude.root)
+
     takeVideoBinding.captureBtn.setOnTouchListener { _, event ->
       if (event.action == MotionEvent.ACTION_DOWN) {
         soundUtil.soundEffect(R.raw.camera_click)
@@ -80,10 +71,15 @@ class TakeVideoActivity : BaseActivity() {
       val intent = Intent(this, NoQRActivity::class.java)
       startActivity(intent)
     }
+
+
+    takeVideoBinding.flash.setOnCheckedChangeListener { _, isChecked ->
+      flashlightUtil.toggleFlashlight(cameraUtil.cameraControl(), isChecked)
+    }
   }
 
   private fun startCamera(){
-    cameraUtil.startCamera(this, takeVideoBinding.cameraPreview, true,
+    cameraUtil.startCamera(this, cameraPreviewBinding.cameraPreview, true,
       enableQrCodeScanning = true,
       qrResultView = takeVideoBinding
         .qrResultTxt,
